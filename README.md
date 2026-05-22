@@ -44,3 +44,18 @@ A partir do processamento feito no Python, destacam-se análises como o **Top 10
 * **Font Awesome** — Biblioteca de ícones vetoriais integrados na página.
 * **Git Bash** — Para versionamento e 'push'
 
+## Autoria e Link do Projeto
+
+Este ecossistema foi totalmente planeado, estruturado e desenvolvido por:
+
+**Gabrielle Keiko**
+*Estudante de Bacharelado em Ciência de Dados e Machine Learning — CEUB*
+
+---
+
+### Conheça o Site do Projeto
+A interface visual, com gráficos interativos e dados apurados:
+**[Aceder ao 'Streaming Tracks Dataset]((https://gabriellekeiko.github.io/Analise_Spotify/))**
+
+
+

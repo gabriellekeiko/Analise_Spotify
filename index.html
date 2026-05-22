@@ -3,7 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Visualizacao de Dados - Tracks Dataset</title>
+  <title>Visualizacao de Dados - Streaming Tracks Dataset</title>
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+
   <style>
     :root {
       --bg: #0b0f0d;
@@ -12,14 +14,9 @@
       --muted: #a8b3ad;
       --line: rgba(255, 255, 255, 0.12);
       --green: #1db954;
-      --green-2: #1ed760;
-      --green-3: #b6f2c8;
-      --track: #26312b;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -38,19 +35,13 @@
       border-bottom: 1px solid var(--line);
     }
 
-    main,
-    h1,
-    .subtitle,
-    footer {
-      width: min(1100px, calc(100% - 28px));
+    main, h1, .subtitle, footer {
+      width: min(1120px, calc(100% - 28px));
       margin-left: auto;
       margin-right: auto;
     }
 
-    main {
-      margin-top: 24px;
-      margin-bottom: 48px;
-    }
+    main { margin-top: 24px; margin-bottom: 48px; }
 
     h1 {
       margin-top: 0;
@@ -63,7 +54,7 @@
       margin-top: 0;
       margin-bottom: 0;
       color: #d5e6dc;
-      max-width: 780px;
+      max-width: 820px;
     }
 
     .summary {
@@ -73,17 +64,14 @@
       margin-bottom: 18px;
     }
 
-    .stat,
-    .card {
+    .stat, .card {
       background: var(--paper);
       border: 1px solid var(--line);
       border-radius: 14px;
       box-shadow: 0 18px 48px rgba(0, 0, 0, 0.28);
     }
 
-    .stat {
-      padding: 16px;
-    }
+    .stat { padding: 16px; }
 
     .stat strong {
       display: block;
@@ -96,29 +84,9 @@
       font-size: 0.9rem;
     }
 
-    .intro {
-      padding: 20px;
-      margin-bottom: 18px;
-    }
-
-    .status {
-      margin-top: 12px;
-      color: var(--green-3);
-      font-weight: bold;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 18px;
-    }
-
     .card {
       padding: 18px;
-    }
-
-    .wide {
-      grid-column: 1 / -1;
+      margin-bottom: 18px;
     }
 
     .label {
@@ -135,87 +103,30 @@
       font-size: 1.22rem;
     }
 
-    .chart {
-      min-height: 280px;
-      margin: 10px 0 14px;
-    }
-
-    .bar-row {
-      display: grid;
-      grid-template-columns: 112px 1fr 62px;
-      align-items: center;
-      gap: 10px;
-      margin: 8px 0;
-      font-size: 0.92rem;
-    }
-
-    .bar-row span {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .bar-track {
-      height: 22px;
-      background: var(--track);
-      border-radius: 999px;
-      overflow: hidden;
-    }
-
-    .bar {
-      height: 100%;
-      border-radius: 999px;
-      background: linear-gradient(90deg, var(--green), var(--green-2));
-    }
-
-    svg {
-      width: 100%;
-      height: auto;
-      display: block;
-      background: #101611;
-      border: 1px solid var(--line);
+    .plot-box {
+      background: white;
       border-radius: 12px;
+      overflow: hidden;
+      padding: 8px;
+      min-height: 420px;
     }
 
-    .axis {
-      stroke: rgba(255, 255, 255, 0.36);
-      stroke-width: 1;
-    }
-
-    .grid-line {
-      stroke: rgba(255, 255, 255, 0.10);
-      stroke-width: 1;
-    }
-
-    .tick {
-      fill: var(--muted);
-      font-size: 11px;
-    }
-
-    .point {
-      fill: var(--green);
-      opacity: 0.75;
-    }
-
-    .line {
-      fill: none;
-      stroke: var(--green-2);
-      stroke-width: 4;
+    .plotly-graph-div {
+      width: 100% !important;
     }
 
     .insight {
-      margin: 0;
+      margin: 14px 0 0;
       padding-left: 12px;
       border-left: 4px solid var(--green);
       color: #dbe9df;
       font-size: 0.95rem;
     }
 
-    .method {
-      display: block;
-      margin-top: 8px;
-      color: var(--muted);
-      font-size: 0.88rem;
+    .status {
+      color: #b6f2c8;
+      margin-bottom: 18px;
+      font-weight: bold;
     }
 
     footer {
@@ -225,482 +136,136 @@
     }
 
     @media (max-width: 820px) {
-      .summary,
-      .grid {
-        grid-template-columns: 1fr;
-      }
-
-      .wide {
-        grid-column: auto;
-      }
-
-      .bar-row {
-        grid-template-columns: 92px 1fr 56px;
-      }
+      .summary { grid-template-columns: 1fr; }
+      .card { padding: 14px; }
     }
   </style>
 </head>
+
 <body>
   <header>
     <h1>Streaming Tracks Dataset</h1>
     <p class="subtitle">
-      Visualizacao de dados sobre musicas em plataformas de streaming. Esta pagina le o arquivo
-      <strong>dataset.csv</strong> diretamente do GitHub Pages e calcula os graficos automaticamente.
+      Visualizacao de dados sobre musicas em plataformas de streaming.
+      Esta pagina mostra os graficos salvos no notebook Atv_Spotify_Tracks_Dataset.ipynb.
     </p>
   </header>
 
   <main>
     <section class="summary">
-      <div class="stat"><strong id="totalTracks">...</strong><span>musicas analisadas</span></div>
-      <div class="stat"><strong id="totalGenres">...</strong><span>generos musicais</span></div>
+      <div class="stat"><strong>Notebook</strong><span>fonte dos graficos</span></div>
+      <div class="stat"><strong>Plotly</strong><span>graficos interativos</span></div>
       <div class="stat"><strong>8</strong><span>perguntas respondidas</span></div>
-      <div class="stat"><strong>CSV</strong><span>dados carregados do arquivo</span></div>
+      <div class="stat"><strong>GitHub</strong><span>pagina estatica</span></div>
     </section>
 
-    <section class="card intro">
-      <h2>Sobre os dados</h2>
-      <p>
-        A base contem musicas com artista, album, genero, popularidade, duracao e atributos sonoros como
-        BPM, energy, loudness, danceability, acousticness, liveness e explicit.
-      </p>
-      <div class="status" id="status">Carregando dataset.csv...</div>
-    </section>
+    <p class="status" id="status">Carregando graficos do notebook...</p>
 
-    <section class="grid">
-      <article class="card wide">
-        <div class="label">Pergunta 1</div>
-        <h2>Quais sao os 10 generos musicais com a maior media de popularidade?</h2>
-        <div class="chart" id="chartGenres"></div>
-        <p class="insight">
-          Este ranking mostra quais generos tiveram maior popularidade media.
-          <span class="method">Metodo: media de popularity agrupada por track_genre.</span>
-        </p>
-      </article>
-
-      <article class="card">
-        <div class="label">Pergunta 2</div>
-        <h2>Qual e a distribuicao do ritmo das musicas na plataforma?</h2>
-        <div class="chart" id="chartTempo"></div>
-        <p class="insight">
-          O histograma mostra em quais faixas de BPM existe maior concentracao de musicas.
-          <span class="method">Metodo: contagem de musicas por faixa de tempo.</span>
-        </p>
-      </article>
-
-      <article class="card">
-        <div class="label">Pergunta 3</div>
-        <h2>O efeito show ao vivo destroi o desempenho no streaming?</h2>
-        <div class="chart" id="chartLiveness"></div>
-        <p class="insight">
-          A comparacao mostra se faixas com maior liveness perdem ou mantem popularidade media.
-          <span class="method">Metodo: liveness em cinco faixas e media de popularity.</span>
-        </p>
-      </article>
-
-      <article class="card wide">
-        <div class="label">Pergunta 4</div>
-        <h2>Ha relacao direta entre loudness e energy?</h2>
-        <div class="chart" id="chartScatter"></div>
-        <p class="insight">
-          Cada ponto representa uma musica da amostra; a tendencia visual indica relacao entre volume e energia.
-          <span class="method">Metodo: amostra de musicas posicionada por loudness e energy.</span>
-        </p>
-      </article>
-
-      <article class="card">
-        <div class="label">Pergunta 5</div>
-        <h2>Como se comporta a dancabilidade entre musicas explicitas e nao explicitas?</h2>
-        <div class="chart" id="chartDance"></div>
-        <p class="insight">
-          O boxplot compara minimo, quartis, mediana e maximo de danceability.
-          <span class="method">Metodo: estatisticas de danceability separadas por explicit.</span>
-        </p>
-      </article>
-
-      <article class="card">
-        <div class="label">Pergunta 6</div>
-        <h2>Musicas mais energeticas sao mais populares?</h2>
-        <div class="chart" id="chartEnergy"></div>
-        <p class="insight">
-          A comparacao mostra como a popularidade media muda conforme o nivel de energy.
-          <span class="method">Metodo: energy em cinco faixas e media de popularity.</span>
-        </p>
-      </article>
-
-      <article class="card">
-        <div class="label">Pergunta 7</div>
-        <h2>O efeito TikTok: musicas mais curtas sao mais populares?</h2>
-        <div class="chart" id="chartDuration"></div>
-        <p class="insight">
-          O grafico compara a popularidade media por faixas de duracao.
-          <span class="method">Metodo: duration_ms convertido para minutos e agrupado em faixas.</span>
-        </p>
-      </article>
-
-      <article class="card">
-        <div class="label">Pergunta 8</div>
-        <h2>O paradoxo da acustica: o que acontece com a energia?</h2>
-        <div class="chart" id="chartAcoustic"></div>
-        <p class="insight">
-          A linha mostra como a energia media muda quando acousticness aumenta.
-          <span class="method">Metodo: acousticness em cinco faixas e media de energy.</span>
-        </p>
-      </article>
-    </section>
+    <section id="charts"></section>
   </main>
 
   <footer>
-    Para funcionar no GitHub Pages, deixe este arquivo index.html e o dataset.csv na mesma pasta.
+    Pagina estatica para GitHub Pages.
   </footer>
 
   <script>
-    const CSV_FILE = "dataset.csv";
+    const NOTEBOOK_FILE = "Atv_Spotify_Tracks_Dataset.ipynb";
 
-    function parseCSV(text) {
-      const rows = [];
-      let row = [];
-      let value = "";
-      let inQuotes = false;
+    const questions = [
+      "Quais sao os 10 generos musicais com a maior media de popularidade?",
+      "Qual e a distribuicao do ritmo das musicas na plataforma?",
+      "O efeito show ao vivo destroi o desempenho no streaming?",
+      "Ha relacao direta entre loudness e energy?",
+      "Como se comporta a dancabilidade entre musicas explicitas e nao explicitas?",
+      "Musicas mais energeticas sao mais populares?",
+      "O efeito TikTok: musicas mais curtas sao mais populares?",
+      "O paradoxo da acustica: o que acontece com a energia?"
+    ];
 
-      for (let i = 0; i < text.length; i++) {
-        const char = text[i];
-        const next = text[i + 1];
+    function asText(value) {
+      return Array.isArray(value) ? value.join("") : value;
+    }
 
-        if (char === '"' && inQuotes && next === '"') {
-          value += '"';
-          i++;
-        } else if (char === '"') {
-          inQuotes = !inQuotes;
-        } else if (char === "," && !inQuotes) {
-          row.push(value);
-          value = "";
-        } else if ((char === "\n" || char === "\r") && !inQuotes) {
-          if (char === "\r" && next === "\n") i++;
-          row.push(value);
-          if (row.length > 1 || row[0] !== "") rows.push(row);
-          row = [];
-          value = "";
-        } else {
-          value += char;
-        }
+    function removeExternalScripts(html) {
+      return html
+        .replace(/<script[^>]+src="https:\/\/cdn\.plot\.ly[^"]*"[^>]*><\/script>/gi, "")
+        .replace(/<script[^>]+src="https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/mathjax[^"]*"[^>]*><\/script>/gi, "");
+    }
+
+    function getBodyContent(html) {
+      const match = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
+      return match ? match[1] : html;
+    }
+
+    function renderNotebookHtml(target, html) {
+      const cleanHtml = removeExternalScripts(getBodyContent(html));
+      const template = document.createElement("template");
+      template.innerHTML = cleanHtml;
+
+      const scripts = Array.from(template.content.querySelectorAll("script"));
+      scripts.forEach(script => script.remove());
+
+      target.innerHTML = "";
+      target.appendChild(template.content);
+
+      scripts.forEach(oldScript => {
+        const script = document.createElement("script");
+        script.textContent = oldScript.textContent;
+        document.body.appendChild(script);
+      });
+    }
+
+    async function loadNotebook() {
+      const response = await fetch(NOTEBOOK_FILE);
+
+      if (!response.ok) {
+        throw new Error("Nao foi possivel carregar o notebook.");
       }
 
-      if (value || row.length) {
-        row.push(value);
-        rows.push(row);
-      }
+      const notebook = await response.json();
+      const outputs = [];
 
-      const headers = rows.shift().map((h) => h.trim());
-      return rows.map((items) => {
-        const obj = {};
-        headers.forEach((header, index) => {
-          obj[header || "index"] = items[index];
+      notebook.cells.forEach(cell => {
+        if (!cell.outputs) return;
+
+        cell.outputs.forEach(output => {
+          if (output.data && output.data["text/html"]) {
+            const html = asText(output.data["text/html"]);
+
+            if (html.includes("Plotly.newPlot")) {
+              outputs.push(html);
+            }
+          }
         });
-        return obj;
       });
-    }
 
-    function number(value) {
-      const n = Number(value);
-      return Number.isFinite(n) ? n : 0;
-    }
+      const charts = document.getElementById("charts");
+      charts.innerHTML = "";
 
-    function average(rows, column) {
-      if (!rows.length) return 0;
-      return rows.reduce((sum, row) => sum + number(row[column]), 0) / rows.length;
-    }
+      outputs.slice(0, 8).forEach((html, index) => {
+        const article = document.createElement("article");
+        article.className = "card";
 
-    function groupBy(rows, column) {
-      const groups = new Map();
-      rows.forEach((row) => {
-        const key = row[column] || "Nao informado";
-        if (!groups.has(key)) groups.set(key, []);
-        groups.get(key).push(row);
-      });
-      return groups;
-    }
-
-    function format(value, digits = 2) {
-      return Number(value).toLocaleString("pt-BR", {
-        minimumFractionDigits: digits,
-        maximumFractionDigits: digits
-      });
-    }
-
-    function formatInt(value) {
-      return Number(value).toLocaleString("pt-BR");
-    }
-
-    function renderBars(elementId, rows, options = {}) {
-      const max = Math.max(...rows.map((row) => row.value), 1);
-      const html = rows.map((row) => {
-        const width = Math.max((row.value / max) * 100, 2);
-        const shown = options.integer ? formatInt(row.value) : format(row.value, options.digits ?? 2);
-        return `
-          <div class="bar-row" title="${row.label}: ${shown}">
-            <span>${row.label}</span>
-            <div class="bar-track"><div class="bar" style="width:${width}%"></div></div>
-            <strong>${shown}</strong>
-          </div>
+        article.innerHTML = `
+          <div class="label">Pergunta ${index + 1}</div>
+          <h2>${questions[index]}</h2>
+          <div class="plot-box" id="plot-${index}"></div>
+          <p class="insight">Grafico interativo extraido diretamente do notebook.</p>
         `;
-      }).join("");
-      document.getElementById(elementId).innerHTML = html;
-    }
 
-    function lineSvg(rows, options = {}) {
-      const width = 520;
-      const height = 280;
-      const left = 54;
-      const right = 492;
-      const top = 30;
-      const bottom = 220;
-      const values = rows.map((row) => row.value);
-      const min = options.min ?? Math.min(...values);
-      const max = options.max ?? Math.max(...values);
-      const step = rows.length > 1 ? (right - left) / (rows.length - 1) : 0;
-
-      const points = rows.map((row, index) => {
-        const x = left + index * step;
-        const y = bottom - ((row.value - min) / (max - min || 1)) * (bottom - top);
-        return { ...row, x, y };
+        charts.appendChild(article);
+        renderNotebookHtml(article.querySelector(".plot-box"), html);
       });
 
-      const polyline = points.map((point) => `${point.x},${point.y}`).join(" ");
-      const labels = points.map((point) =>
-        `<text class="tick" x="${point.x - 20}" y="248">${point.short || point.label}</text>`
-      ).join("");
-      const circles = points.map((point) =>
-        `<circle class="point" cx="${point.x}" cy="${point.y}" r="6"><title>${point.label}: ${format(point.value, options.digits ?? 2)}</title></circle>`
-      ).join("");
-
-      return `
-        <svg viewBox="0 0 ${width} ${height}">
-          <line class="grid-line" x1="${left}" y1="60" x2="${right}" y2="60"/>
-          <line class="grid-line" x1="${left}" y1="126" x2="${right}" y2="126"/>
-          <line class="grid-line" x1="${left}" y1="192" x2="${right}" y2="192"/>
-          <line class="axis" x1="${left}" y1="${top}" x2="${left}" y2="${bottom}"/>
-          <line class="axis" x1="${left}" y1="${bottom}" x2="${right}" y2="${bottom}"/>
-          <polyline class="line" points="${polyline}"/>
-          ${circles}
-          ${labels}
-        </svg>
-      `;
+      document.getElementById("status").textContent =
+        `Graficos carregados com sucesso: ${Math.min(outputs.length, 8)} graficos encontrados.`;
     }
 
-    function scatterSvg(rows) {
-      const width = 900;
-      const height = 360;
-      const left = 70;
-      const right = 850;
-      const top = 30;
-      const bottom = 300;
-      const xMin = -20;
-      const xMax = 2;
-      const yMin = 0;
-      const yMax = 1;
-
-      const circles = rows.map((row) => {
-        const xValue = number(row.loudness);
-        const yValue = number(row.energy);
-        if (xValue < xMin || xValue > xMax) return "";
-        const x = left + ((xValue - xMin) / (xMax - xMin)) * (right - left);
-        const y = bottom - ((yValue - yMin) / (yMax - yMin)) * (bottom - top);
-        return `<circle class="point" cx="${x}" cy="${y}" r="4"><title>Loudness ${format(xValue, 2)} | Energy ${format(yValue, 3)}</title></circle>`;
-      }).join("");
-
-      return `
-        <svg viewBox="0 0 ${width} ${height}">
-          <line class="grid-line" x1="${left}" y1="55" x2="${right}" y2="55"/>
-          <line class="grid-line" x1="${left}" y1="145" x2="${right}" y2="145"/>
-          <line class="grid-line" x1="${left}" y1="235" x2="${right}" y2="235"/>
-          <line class="axis" x1="${left}" y1="${top}" x2="${left}" y2="${bottom}"/>
-          <line class="axis" x1="${left}" y1="${bottom}" x2="${right}" y2="${bottom}"/>
-          <text class="tick" x="22" y="60">1,00</text>
-          <text class="tick" x="22" y="150">0,50</text>
-          <text class="tick" x="22" y="240">0,25</text>
-          <text class="tick" x="70" y="326">-20</text>
-          <text class="tick" x="270" y="326">-15</text>
-          <text class="tick" x="470" y="326">-10</text>
-          <text class="tick" x="670" y="326">-5</text>
-          <text class="tick" x="840" y="326">0</text>
-          ${circles}
-        </svg>
-      `;
-    }
-
-    function quantile(values, q) {
-      const sorted = values.slice().sort((a, b) => a - b);
-      const pos = (sorted.length - 1) * q;
-      const base = Math.floor(pos);
-      const rest = pos - base;
-      if (sorted[base + 1] !== undefined) {
-        return sorted[base] + rest * (sorted[base + 1] - sorted[base]);
-      }
-      return sorted[base] || 0;
-    }
-
-    function boxSvg(groups) {
-      const width = 520;
-      const height = 280;
-      const bottom = 224;
-      const scaleY = (value) => bottom - value * 190;
-      const items = groups.map((group, index) => {
-        const values = group.values;
-        const min = Math.min(...values);
-        const q1 = quantile(values, 0.25);
-        const median = quantile(values, 0.5);
-        const q3 = quantile(values, 0.75);
-        const max = Math.max(...values);
-        const cx = index === 0 ? 180 : 340;
-        const color = index === 0 ? "#1db954" : "#1ed760";
-        return `
-          <line x1="${cx}" y1="${scaleY(max)}" x2="${cx}" y2="${scaleY(min)}" stroke="${color}" stroke-width="2"/>
-          <rect x="${cx - 45}" y="${scaleY(q3)}" width="90" height="${scaleY(q1) - scaleY(q3)}" fill="rgba(29,185,84,0.22)" stroke="${color}" stroke-width="2">
-            <title>${group.label} | mediana ${format(median, 3)}</title>
-          </rect>
-          <line x1="${cx - 45}" y1="${scaleY(median)}" x2="${cx + 45}" y2="${scaleY(median)}" stroke="#f4fff7" stroke-width="3"/>
-          <line x1="${cx - 30}" y1="${scaleY(min)}" x2="${cx + 30}" y2="${scaleY(min)}" stroke="${color}" stroke-width="2"/>
-          <line x1="${cx - 30}" y1="${scaleY(max)}" x2="${cx + 30}" y2="${scaleY(max)}" stroke="${color}" stroke-width="2"/>
-          <text class="tick" x="${cx - 40}" y="254">${group.label}</text>
-        `;
-      }).join("");
-
-      return `
-        <svg viewBox="0 0 ${width} ${height}">
-          <line class="grid-line" x1="62" y1="40" x2="492" y2="40"/>
-          <line class="grid-line" x1="62" y1="100" x2="492" y2="100"/>
-          <line class="grid-line" x1="62" y1="160" x2="492" y2="160"/>
-          <line class="axis" x1="62" y1="28" x2="62" y2="224"/>
-          <line class="axis" x1="62" y1="224" x2="492" y2="224"/>
-          <text class="tick" x="22" y="44">1,00</text>
-          <text class="tick" x="22" y="104">0,75</text>
-          <text class="tick" x="22" y="164">0,50</text>
-          ${items}
-        </svg>
-      `;
-    }
-
-    function rowsByRange(rows, column, ranges) {
-      return ranges.map((range) => {
-        const filtered = rows.filter((row) => {
-          const value = number(row[column]);
-          return value >= range.min && value < range.max;
-        });
-        return {
-          label: range.label,
-          short: range.short,
-          rows: filtered
-        };
-      });
-    }
-
-    function buildDashboard(rows) {
-      const genres = groupBy(rows, "track_genre");
-      const topGenres = Array.from(genres.entries()).map(([label, items]) => ({
-        label,
-        value: average(items, "popularity")
-      })).sort((a, b) => b.value - a.value).slice(0, 10);
-
-      const tempoRanges = [
-        { label: "0-60", min: 0, max: 60 },
-        { label: "60-80", min: 60, max: 80 },
-        { label: "80-100", min: 80, max: 100 },
-        { label: "100-120", min: 100, max: 120 },
-        { label: "120-140", min: 120, max: 140 },
-        { label: "140-160", min: 140, max: 160 },
-        { label: "160-180", min: 160, max: 180 },
-        { label: "180+", min: 180, max: 999 }
-      ];
-
-      const fiveRanges = [
-        { label: "Muito baixo", short: "Muito baixo", min: 0, max: 0.2 },
-        { label: "Baixo", short: "Baixo", min: 0.2, max: 0.4 },
-        { label: "Medio", short: "Medio", min: 0.4, max: 0.6 },
-        { label: "Alto", short: "Alto", min: 0.6, max: 0.8 },
-        { label: "Muito alto", short: "Muito alto", min: 0.8, max: 1.01 }
-      ];
-
-      const durationRanges = [
-        { label: "Ate 2 min", short: "Ate 2", min: 0, max: 2 },
-        { label: "2 a 3 min", short: "2-3", min: 2, max: 3 },
-        { label: "3 a 4 min", short: "3-4", min: 3, max: 4 },
-        { label: "4 a 5 min", short: "4-5", min: 4, max: 5 },
-        { label: "Mais de 5 min", short: "5+", min: 5, max: 999 }
-      ];
-
-      const tempoData = rowsByRange(rows, "tempo", tempoRanges).map((item) => ({
-        label: item.label,
-        value: item.rows.length
-      }));
-
-      const livenessData = rowsByRange(rows, "liveness", fiveRanges).map((item) => ({
-        label: item.label,
-        short: item.short,
-        value: average(item.rows, "popularity")
-      }));
-
-      const energyData = rowsByRange(rows, "energy", fiveRanges).map((item) => ({
-        label: item.label,
-        value: average(item.rows, "popularity")
-      }));
-
-      const durationRows = rows.map((row) => ({
-        ...row,
-        duration_min: number(row.duration_ms) / 60000
-      }));
-
-      const durationData = durationRanges.map((range) => {
-        const filtered = durationRows.filter((row) => row.duration_min >= range.min && row.duration_min < range.max);
-        return {
-          label: range.label,
-          short: range.short,
-          value: average(filtered, "popularity")
-        };
-      });
-
-      const acousticData = rowsByRange(rows, "acousticness", fiveRanges).map((item) => ({
-        label: item.label,
-        short: item.short,
-        value: average(item.rows, "energy")
-      }));
-
-      const explicitFalse = rows.filter((row) => String(row.explicit).toLowerCase() === "false").map((row) => number(row.danceability));
-      const explicitTrue = rows.filter((row) => String(row.explicit).toLowerCase() === "true").map((row) => number(row.danceability));
-
-      document.getElementById("totalTracks").textContent = formatInt(rows.length);
-      document.getElementById("totalGenres").textContent = formatInt(genres.size);
-
-      renderBars("chartGenres", topGenres, { digits: 2 });
-      renderBars("chartTempo", tempoData, { integer: true });
-      document.getElementById("chartLiveness").innerHTML = lineSvg(livenessData, { min: 25, max: 45, digits: 2 });
-      document.getElementById("chartScatter").innerHTML = scatterSvg(rows.filter((_, index) => index % 500 === 0));
-      document.getElementById("chartDance").innerHTML = boxSvg([
-        { label: "Nao explicita", values: explicitFalse },
-        { label: "Explicita", values: explicitTrue }
-      ]);
-      renderBars("chartEnergy", energyData, { digits: 2 });
-      document.getElementById("chartDuration").innerHTML = lineSvg(durationData, { min: 20, max: 45, digits: 2 });
-      document.getElementById("chartAcoustic").innerHTML = lineSvg(acousticData, { min: 0, max: 1, digits: 3 });
-
-      document.getElementById("status").textContent = "Dataset carregado com sucesso.";
-    }
-
-    fetch(CSV_FILE)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Nao foi possivel carregar dataset.csv");
-        }
-        return response.text();
-      })
-      .then((text) => {
-        const rows = parseCSV(text);
-        buildDashboard(rows);
-      })
-      .catch((error) => {
-        document.getElementById("status").textContent =
-          "Erro ao carregar dataset.csv. Confira se o arquivo esta na mesma pasta do index.html no GitHub.";
-        console.error(error);
-      });
+    loadNotebook().catch(error => {
+      document.getElementById("status").textContent =
+        "Erro ao carregar os graficos. Confira se o arquivo .ipynb esta na mesma pasta do index.html.";
+      console.error(error);
+    });
   </script>
 </body>
 </html>

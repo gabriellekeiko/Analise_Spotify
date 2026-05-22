@@ -55,7 +55,7 @@ Este ecossistema foi totalmente planeado, estruturado e desenvolvido por:
 
 ### Conheça o Site do Projeto
 A interface visual, com gráficos interativos e dados apurados:
-**[Aceder ao 'Streaming Tracks Dataset]((https://gabriellekeiko.github.io/Analise_Spotify/))**
+**[Aceder ao Streaming Tracks Dataset](https://gabriellekeiko.github.io/Analise_Spotify/)**
 
 
 

@@ -11,12 +11,9 @@
       --ink: #f4fff7;
       --muted: #a8b3ad;
       --line: rgba(255, 255, 255, 0.12);
-      --blue: #1db954;
       --green: #1db954;
-      --orange: #1ed760;
-      --purple: #b6f2c8;
-      --red: #22c55e;
-      --yellow: #84cc16;
+      --green-2: #1ed760;
+      --green-3: #b6f2c8;
       --track: #26312b;
     }
 
@@ -41,21 +38,30 @@
       border-bottom: 1px solid var(--line);
     }
 
-    main {
+    main,
+    h1,
+    .subtitle,
+    footer {
       width: min(1100px, calc(100% - 28px));
-      margin: 24px auto 48px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    main {
+      margin-top: 24px;
+      margin-bottom: 48px;
     }
 
     h1 {
-      width: min(1100px, calc(100% - 28px));
-      margin: 0 auto 10px;
+      margin-top: 0;
+      margin-bottom: 10px;
       font-size: clamp(2rem, 5vw, 4rem);
       line-height: 1.05;
     }
 
     .subtitle {
-      width: min(1100px, calc(100% - 28px));
-      margin: 0 auto;
+      margin-top: 0;
+      margin-bottom: 0;
       color: #d5e6dc;
       max-width: 780px;
     }
@@ -95,6 +101,12 @@
       margin-bottom: 18px;
     }
 
+    .status {
+      margin-top: 12px;
+      color: var(--green-3);
+      font-weight: bold;
+    }
+
     .grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -130,11 +142,17 @@
 
     .bar-row {
       display: grid;
-      grid-template-columns: 112px 1fr 54px;
+      grid-template-columns: 112px 1fr 62px;
       align-items: center;
       gap: 10px;
       margin: 8px 0;
       font-size: 0.92rem;
+    }
+
+    .bar-row span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .bar-track {
@@ -147,23 +165,7 @@
     .bar {
       height: 100%;
       border-radius: 999px;
-      background: var(--blue);
-    }
-
-    .bar.green {
-      background: var(--green);
-    }
-
-    .bar.orange {
-      background: var(--orange);
-    }
-
-    .bar.purple {
-      background: var(--purple);
-    }
-
-    .bar.yellow {
-      background: var(--yellow);
+      background: linear-gradient(90deg, var(--green), var(--green-2));
     }
 
     svg {
@@ -190,6 +192,17 @@
       font-size: 11px;
     }
 
+    .point {
+      fill: var(--green);
+      opacity: 0.75;
+    }
+
+    .line {
+      fill: none;
+      stroke: var(--green-2);
+      stroke-width: 4;
+    }
+
     .insight {
       margin: 0;
       padding-left: 12px;
@@ -206,8 +219,7 @@
     }
 
     footer {
-      width: min(1100px, calc(100% - 28px));
-      margin: 0 auto 36px;
+      margin-bottom: 36px;
       color: var(--muted);
       font-size: 0.9rem;
     }
@@ -223,7 +235,7 @@
       }
 
       .bar-row {
-        grid-template-columns: 92px 1fr 48px;
+        grid-template-columns: 92px 1fr 56px;
       }
     }
   </style>
@@ -232,149 +244,65 @@
   <header>
     <h1>Streaming Tracks Dataset</h1>
     <p class="subtitle">
-      Visualizacao de dados sobre musicas em plataformas de streaming, com uma paleta inspirada
-      em apps musicais. Os graficos respondem perguntas sobre popularidade, genero, ritmo,
-      energia, duracao e caracteristicas sonoras.
+      Visualizacao de dados sobre musicas em plataformas de streaming. Esta pagina le o arquivo
+      <strong>dataset.csv</strong> diretamente do GitHub Pages e calcula os graficos automaticamente.
     </p>
   </header>
 
   <main>
     <section class="summary">
-      <div class="stat"><strong>114.000</strong><span>musicas analisadas</span></div>
-      <div class="stat"><strong>114</strong><span>generos musicais</span></div>
+      <div class="stat"><strong id="totalTracks">...</strong><span>musicas analisadas</span></div>
+      <div class="stat"><strong id="totalGenres">...</strong><span>generos musicais</span></div>
       <div class="stat"><strong>8</strong><span>perguntas respondidas</span></div>
-      <div class="stat"><strong>0</strong><span>bibliotecas externas</span></div>
+      <div class="stat"><strong>CSV</strong><span>dados carregados do arquivo</span></div>
     </section>
 
     <section class="card intro">
       <h2>Sobre os dados</h2>
       <p>
         A base contem musicas com artista, album, genero, popularidade, duracao e atributos sonoros como
-        BPM, energy, loudness, danceability, acousticness, liveness e explicit. Os valores mostrados aqui
-        foram calculados previamente a partir do dataset usado no notebook.
+        BPM, energy, loudness, danceability, acousticness, liveness e explicit.
       </p>
+      <div class="status" id="status">Carregando dataset.csv...</div>
     </section>
 
     <section class="grid">
       <article class="card wide">
         <div class="label">Pergunta 1</div>
         <h2>Quais sao os 10 generos musicais com a maior media de popularidade?</h2>
-        <div class="chart">
-          <div class="bar-row" title="pop-film: popularidade media 59,28"><span>pop-film</span><div class="bar-track"><div class="bar green" style="width: 100%"></div></div><strong>59,28</strong></div>
-          <div class="bar-row" title="k-pop: popularidade media 56,90"><span>k-pop</span><div class="bar-track"><div class="bar green" style="width: 96%"></div></div><strong>56,90</strong></div>
-          <div class="bar-row" title="chill: popularidade media 53,65"><span>chill</span><div class="bar-track"><div class="bar green" style="width: 90%"></div></div><strong>53,65</strong></div>
-          <div class="bar-row" title="sad: popularidade media 52,38"><span>sad</span><div class="bar-track"><div class="bar green" style="width: 88%"></div></div><strong>52,38</strong></div>
-          <div class="bar-row" title="grunge: popularidade media 49,59"><span>grunge</span><div class="bar-track"><div class="bar green" style="width: 84%"></div></div><strong>49,59</strong></div>
-          <div class="bar-row" title="indian: popularidade media 49,54"><span>indian</span><div class="bar-track"><div class="bar green" style="width: 84%"></div></div><strong>49,54</strong></div>
-          <div class="bar-row" title="anime: popularidade media 48,77"><span>anime</span><div class="bar-track"><div class="bar green" style="width: 82%"></div></div><strong>48,77</strong></div>
-          <div class="bar-row" title="emo: popularidade media 48,13"><span>emo</span><div class="bar-track"><div class="bar green" style="width: 81%"></div></div><strong>48,13</strong></div>
-          <div class="bar-row" title="sertanejo: popularidade media 47,87"><span>sertanejo</span><div class="bar-track"><div class="bar green" style="width: 81%"></div></div><strong>47,87</strong></div>
-          <div class="bar-row" title="pop: popularidade media 47,58"><span>pop</span><div class="bar-track"><div class="bar green" style="width: 80%"></div></div><strong>47,58</strong></div>
-        </div>
+        <div class="chart" id="chartGenres"></div>
         <p class="insight">
-          Pop-film, k-pop e chill aparecem no topo da base.
-          <span class="method">Metodo: media de popularidade agrupada por genero musical.</span>
+          Este ranking mostra quais generos tiveram maior popularidade media.
+          <span class="method">Metodo: media de popularity agrupada por track_genre.</span>
         </p>
       </article>
 
       <article class="card">
         <div class="label">Pergunta 2</div>
         <h2>Qual e a distribuicao do ritmo das musicas na plataforma?</h2>
-        <div class="chart">
-          <div class="bar-row" title="0-60 BPM: 518 musicas"><span>0-60</span><div class="bar-track"><div class="bar" style="width: 2%"></div></div><strong>518</strong></div>
-          <div class="bar-row" title="60-80 BPM: 7.375 musicas"><span>60-80</span><div class="bar-track"><div class="bar" style="width: 24%"></div></div><strong>7.375</strong></div>
-          <div class="bar-row" title="80-100 BPM: 21.967 musicas"><span>80-100</span><div class="bar-track"><div class="bar" style="width: 70%"></div></div><strong>21.967</strong></div>
-          <div class="bar-row" title="100-120 BPM: 23.444 musicas"><span>100-120</span><div class="bar-track"><div class="bar" style="width: 75%"></div></div><strong>23.444</strong></div>
-          <div class="bar-row" title="120-140 BPM: 31.373 musicas"><span>120-140</span><div class="bar-track"><div class="bar" style="width: 100%"></div></div><strong>31.373</strong></div>
-          <div class="bar-row" title="140-160 BPM: 15.175 musicas"><span>140-160</span><div class="bar-track"><div class="bar" style="width: 48%"></div></div><strong>15.175</strong></div>
-          <div class="bar-row" title="160-180 BPM: 10.634 musicas"><span>160-180</span><div class="bar-track"><div class="bar" style="width: 34%"></div></div><strong>10.634</strong></div>
-          <div class="bar-row" title="180+ BPM: 3.514 musicas"><span>180+</span><div class="bar-track"><div class="bar" style="width: 11%"></div></div><strong>3.514</strong></div>
-        </div>
+        <div class="chart" id="chartTempo"></div>
         <p class="insight">
-          A maior concentracao esta entre 120 e 140 BPM.
-          <span class="method">Metodo: contagem de musicas por faixa de BPM.</span>
+          O histograma mostra em quais faixas de BPM existe maior concentracao de musicas.
+          <span class="method">Metodo: contagem de musicas por faixa de tempo.</span>
         </p>
       </article>
 
       <article class="card">
         <div class="label">Pergunta 3</div>
         <h2>O efeito show ao vivo destroi o desempenho no streaming?</h2>
-        <div class="chart">
-          <svg viewBox="0 0 520 280" role="img" aria-label="Popularidade media por nivel de liveness">
-            <line class="grid-line" x1="54" y1="52" x2="492" y2="52"/>
-            <line class="grid-line" x1="54" y1="126" x2="492" y2="126"/>
-            <line class="grid-line" x1="54" y1="200" x2="492" y2="200"/>
-            <line class="axis" x1="54" y1="28" x2="54" y2="220"/>
-            <line class="axis" x1="54" y1="220" x2="492" y2="220"/>
-            <text class="tick" x="28" y="204">32</text>
-            <text class="tick" x="28" y="130">34</text>
-            <text class="tick" x="28" y="56">36</text>
-            <polyline points="54,183 164,216 274,186 384,162 492,138" fill="none" stroke="#1ed760" stroke-width="4"/>
-            <circle cx="54" cy="183" r="6" fill="#1ed760"><title>Muito baixo: popularidade media 33,69</title></circle>
-            <circle cx="164" cy="216" r="6" fill="#1ed760"><title>Baixo: popularidade media 31,93</title></circle>
-            <circle cx="274" cy="186" r="6" fill="#1ed760"><title>Medio: popularidade media 32,72</title></circle>
-            <circle cx="384" cy="162" r="6" fill="#1ed760"><title>Alto: popularidade media 33,37</title></circle>
-            <circle cx="492" cy="138" r="6" fill="#1ed760"><title>Muito alto: popularidade media 34,02</title></circle>
-            <text class="tick" x="38" y="246">Muito baixo</text>
-            <text class="tick" x="150" y="246">Baixo</text>
-            <text class="tick" x="260" y="246">Medio</text>
-            <text class="tick" x="376" y="246">Alto</text>
-            <text class="tick" x="468" y="246">Muito alto</text>
-          </svg>
-        </div>
+        <div class="chart" id="chartLiveness"></div>
         <p class="insight">
-          O aumento de liveness nao derruba a popularidade media de forma clara.
-          <span class="method">Metodo: liveness em cinco faixas e popularidade media.</span>
+          A comparacao mostra se faixas com maior liveness perdem ou mantem popularidade media.
+          <span class="method">Metodo: liveness em cinco faixas e media de popularity.</span>
         </p>
       </article>
 
       <article class="card wide">
         <div class="label">Pergunta 4</div>
         <h2>Ha relacao direta entre loudness e energy?</h2>
-        <div class="chart">
-          <svg viewBox="0 0 900 360" role="img" aria-label="Grafico de dispersao entre loudness e energy">
-            <line class="grid-line" x1="70" y1="55" x2="850" y2="55"/>
-            <line class="grid-line" x1="70" y1="145" x2="850" y2="145"/>
-            <line class="grid-line" x1="70" y1="235" x2="850" y2="235"/>
-            <line class="axis" x1="70" y1="30" x2="70" y2="300"/>
-            <line class="axis" x1="70" y1="300" x2="850" y2="300"/>
-            <text class="tick" x="22" y="60">1,00</text>
-            <text class="tick" x="22" y="150">0,50</text>
-            <text class="tick" x="22" y="240">0,25</text>
-            <text class="tick" x="70" y="326">-20</text>
-            <text class="tick" x="270" y="326">-15</text>
-            <text class="tick" x="470" y="326">-10</text>
-            <text class="tick" x="670" y="326">-5</text>
-            <text class="tick" x="840" y="326">0</text>
-
-            <circle cx="585" cy="176" r="4" fill="#1db954"><title>Loudness -6,75 | Energy 0,461</title></circle>
-            <circle cx="374" cy="259" r="4" fill="#1db954"><title>Loudness -12,70 | Energy 0,150</title></circle>
-            <circle cx="363" cy="269" r="4" fill="#1db954"><title>Loudness -13,00 | Energy 0,114</title></circle>
-            <circle cx="646" cy="71" r="4" fill="#1db954"><title>Loudness -5,02 | Energy 0,850</title></circle>
-            <circle cx="556" cy="90" r="4" fill="#1db954"><title>Loudness -7,56 | Energy 0,778</title></circle>
-            <circle cx="462" cy="165" r="4" fill="#1db954"><title>Loudness -10,20 | Energy 0,502</title></circle>
-            <circle cx="471" cy="155" r="4" fill="#1db954"><title>Loudness -9,94 | Energy 0,538</title></circle>
-            <circle cx="620" cy="158" r="4" fill="#1db954"><title>Loudness -5,76 | Energy 0,529</title></circle>
-            <circle cx="488" cy="160" r="4" fill="#1db954"><title>Loudness -9,46 | Energy 0,521</title></circle>
-            <circle cx="599" cy="169" r="4" fill="#1db954"><title>Loudness -6,35 | Energy 0,487</title></circle>
-            <circle cx="622" cy="115" r="4" fill="#1db954"><title>Loudness -5,70 | Energy 0,686</title></circle>
-            <circle cx="653" cy="102" r="4" fill="#1db954"><title>Loudness -4,81 | Energy 0,735</title></circle>
-            <circle cx="561" cy="127" r="4" fill="#1db954"><title>Loudness -7,43 | Energy 0,640</title></circle>
-            <circle cx="488" cy="223" r="4" fill="#1db954"><title>Loudness -9,47 | Energy 0,287</title></circle>
-            <circle cx="487" cy="145" r="4" fill="#1db954"><title>Loudness -9,48 | Energy 0,574</title></circle>
-            <circle cx="665" cy="38" r="4" fill="#1db954"><title>Loudness -4,50 | Energy 0,927</title></circle>
-            <circle cx="710" cy="32" r="4" fill="#1db954"><title>Loudness -3,20 | Energy 0,950</title></circle>
-            <circle cx="332" cy="271" r="4" fill="#1db954"><title>Loudness -13,90 | Energy 0,105</title></circle>
-            <circle cx="523" cy="198" r="4" fill="#1db954"><title>Loudness -8,50 | Energy 0,379</title></circle>
-            <circle cx="690" cy="64" r="4" fill="#1db954"><title>Loudness -3,75 | Energy 0,882</title></circle>
-            <circle cx="530" cy="117" r="4" fill="#1db954"><title>Loudness -8,30 | Energy 0,675</title></circle>
-            <circle cx="617" cy="92" r="4" fill="#1db954"><title>Loudness -5,85 | Energy 0,824</title></circle>
-            <circle cx="590" cy="140" r="4" fill="#1db954"><title>Loudness -6,60 | Energy 0,594</title></circle>
-            <circle cx="445" cy="205" r="4" fill="#1db954"><title>Loudness -10,70 | Energy 0,348</title></circle>
-          </svg>
-        </div>
+        <div class="chart" id="chartScatter"></div>
         <p class="insight">
-          Os pontos sugerem tendencia positiva: musicas com loudness mais alto costumam ter energy maior.
+          Cada ponto representa uma musica da amostra; a tendencia visual indica relacao entre volume e energia.
           <span class="method">Metodo: amostra de musicas posicionada por loudness e energy.</span>
         </p>
       </article>
@@ -382,109 +310,39 @@
       <article class="card">
         <div class="label">Pergunta 5</div>
         <h2>Como se comporta a dancabilidade entre musicas explicitas e nao explicitas?</h2>
-        <div class="chart">
-          <svg viewBox="0 0 520 280" role="img" aria-label="Boxplot de danceability por conteudo explicito">
-            <line class="grid-line" x1="62" y1="40" x2="492" y2="40"/>
-            <line class="grid-line" x1="62" y1="100" x2="492" y2="100"/>
-            <line class="grid-line" x1="62" y1="160" x2="492" y2="160"/>
-            <line class="axis" x1="62" y1="28" x2="62" y2="224"/>
-            <line class="axis" x1="62" y1="224" x2="492" y2="224"/>
-            <text class="tick" x="22" y="44">1,00</text>
-            <text class="tick" x="22" y="104">0,75</text>
-            <text class="tick" x="22" y="164">0,50</text>
-
-            <line x1="180" y1="28" x2="180" y2="224" stroke="#1db954" stroke-width="2"/>
-            <rect x="135" y="89" width="90" height="57" fill="rgba(29,185,84,0.22)" stroke="#1db954" stroke-width="2"><title>Nao explicita | mediana 0,574</title></rect>
-            <line x1="135" y1="117" x2="225" y2="117" stroke="#f4fff7" stroke-width="3"/>
-            <line x1="150" y1="28" x2="210" y2="28" stroke="#1db954" stroke-width="2"/>
-            <line x1="150" y1="224" x2="210" y2="224" stroke="#1db954" stroke-width="2"/>
-
-            <line x1="340" y1="32" x2="340" y2="210" stroke="#1ed760" stroke-width="2"/>
-            <rect x="295" y="68" width="90" height="60" fill="rgba(30,215,96,0.20)" stroke="#1ed760" stroke-width="2"><title>Explicita | mediana 0,658</title></rect>
-            <line x1="295" y1="96" x2="385" y2="96" stroke="#f4fff7" stroke-width="3"/>
-            <line x1="310" y1="32" x2="370" y2="32" stroke="#1ed760" stroke-width="2"/>
-            <line x1="310" y1="210" x2="370" y2="210" stroke="#1ed760" stroke-width="2"/>
-
-            <text class="tick" x="142" y="254">Nao explicita</text>
-            <text class="tick" x="308" y="254">Explicita</text>
-          </svg>
-        </div>
+        <div class="chart" id="chartDance"></div>
         <p class="insight">
-          Musicas explicitas possuem mediana de danceability maior.
-          <span class="method">Metodo: minimo, quartis, mediana e maximo por tipo de conteudo.</span>
+          O boxplot compara minimo, quartis, mediana e maximo de danceability.
+          <span class="method">Metodo: estatisticas de danceability separadas por explicit.</span>
         </p>
       </article>
 
       <article class="card">
         <div class="label">Pergunta 6</div>
         <h2>Musicas mais energeticas sao mais populares?</h2>
-        <div class="chart">
-          <div class="bar-row" title="Energia muito baixa: popularidade media 28,92"><span>Muito baixa</span><div class="bar-track"><div class="bar orange" style="width: 72%"></div></div><strong>28,92</strong></div>
-          <div class="bar-row" title="Energia baixa: popularidade media 32,33"><span>Baixa</span><div class="bar-track"><div class="bar orange" style="width: 81%"></div></div><strong>32,33</strong></div>
-          <div class="bar-row" title="Energia media: popularidade media 35,39"><span>Media</span><div class="bar-track"><div class="bar orange" style="width: 88%"></div></div><strong>35,39</strong></div>
-          <div class="bar-row" title="Energia alta: popularidade media 34,85"><span>Alta</span><div class="bar-track"><div class="bar orange" style="width: 87%"></div></div><strong>34,85</strong></div>
-          <div class="bar-row" title="Energia muito alta: popularidade media 31,80"><span>Muito alta</span><div class="bar-track"><div class="bar orange" style="width: 80%"></div></div><strong>31,80</strong></div>
-        </div>
+        <div class="chart" id="chartEnergy"></div>
         <p class="insight">
-          A popularidade media cresce ate energia media/alta e cai nas musicas de energia muito alta.
-          <span class="method">Metodo: energy em cinco faixas e media de popularidade.</span>
+          A comparacao mostra como a popularidade media muda conforme o nivel de energy.
+          <span class="method">Metodo: energy em cinco faixas e media de popularity.</span>
         </p>
       </article>
 
       <article class="card">
         <div class="label">Pergunta 7</div>
         <h2>O efeito TikTok: musicas mais curtas sao mais populares?</h2>
-        <div class="chart">
-          <svg viewBox="0 0 520 280" role="img" aria-label="Popularidade media por duracao da musica">
-            <line class="grid-line" x1="54" y1="52" x2="492" y2="52"/>
-            <line class="grid-line" x1="54" y1="126" x2="492" y2="126"/>
-            <line class="grid-line" x1="54" y1="200" x2="492" y2="200"/>
-            <line class="axis" x1="54" y1="28" x2="54" y2="220"/>
-            <line class="axis" x1="54" y1="220" x2="492" y2="220"/>
-            <polyline points="54,203 164,152 274,108 384,107 492,167" fill="none" stroke="#b6f2c8" stroke-width="4"/>
-            <circle cx="54" cy="203" r="6" fill="#b6f2c8"><title>Ate 2 min: popularidade media 28,40</title></circle>
-            <circle cx="164" cy="152" r="6" fill="#b6f2c8"><title>2 a 3 min: popularidade media 32,09</title></circle>
-            <circle cx="274" cy="108" r="6" fill="#b6f2c8"><title>3 a 4 min: popularidade media 34,68</title></circle>
-            <circle cx="384" cy="107" r="6" fill="#b6f2c8"><title>4 a 5 min: popularidade media 34,73</title></circle>
-            <circle cx="492" cy="167" r="6" fill="#b6f2c8"><title>Mais de 5 min: popularidade media 31,10</title></circle>
-            <text class="tick" x="35" y="246">Ate 2</text>
-            <text class="tick" x="148" y="246">2-3</text>
-            <text class="tick" x="258" y="246">3-4</text>
-            <text class="tick" x="368" y="246">4-5</text>
-            <text class="tick" x="466" y="246">5+</text>
-          </svg>
-        </div>
+        <div class="chart" id="chartDuration"></div>
         <p class="insight">
-          Na base, musicas de 3 a 5 minutos tiveram medias maiores que faixas muito curtas.
-          <span class="method">Metodo: duracao em faixas e media de popularidade.</span>
+          O grafico compara a popularidade media por faixas de duracao.
+          <span class="method">Metodo: duration_ms convertido para minutos e agrupado em faixas.</span>
         </p>
       </article>
 
       <article class="card">
         <div class="label">Pergunta 8</div>
         <h2>O paradoxo da acustica: o que acontece com a energia?</h2>
-        <div class="chart">
-          <svg viewBox="0 0 520 280" role="img" aria-label="Energia media por nivel de acousticness">
-            <line class="grid-line" x1="54" y1="52" x2="492" y2="52"/>
-            <line class="grid-line" x1="54" y1="126" x2="492" y2="126"/>
-            <line class="grid-line" x1="54" y1="200" x2="492" y2="200"/>
-            <line class="axis" x1="54" y1="28" x2="54" y2="220"/>
-            <line class="axis" x1="54" y1="220" x2="492" y2="220"/>
-            <polyline points="54,53 164,84 274,98 384,120 492,174" fill="none" stroke="#84cc16" stroke-width="4"/>
-            <circle cx="54" cy="53" r="6" fill="#84cc16"><title>Acousticness muito baixa: energia media 0,782</title></circle>
-            <circle cx="164" cy="84" r="6" fill="#84cc16"><title>Acousticness baixa: energia media 0,647</title></circle>
-            <circle cx="274" cy="98" r="6" fill="#84cc16"><title>Acousticness media: energia media 0,584</title></circle>
-            <circle cx="384" cy="120" r="6" fill="#84cc16"><title>Acousticness alta: energia media 0,487</title></circle>
-            <circle cx="492" cy="174" r="6" fill="#84cc16"><title>Acousticness muito alta: energia media 0,268</title></circle>
-            <text class="tick" x="38" y="246">Muito baixa</text>
-            <text class="tick" x="150" y="246">Baixa</text>
-            <text class="tick" x="260" y="246">Media</text>
-            <text class="tick" x="376" y="246">Alta</text>
-            <text class="tick" x="468" y="246">Muito alta</text>
-          </svg>
-        </div>
+        <div class="chart" id="chartAcoustic"></div>
         <p class="insight">
-          Quanto maior a acousticness, menor tende a ser a energia media.
+          A linha mostra como a energia media muda quando acousticness aumenta.
           <span class="method">Metodo: acousticness em cinco faixas e media de energy.</span>
         </p>
       </article>
@@ -492,7 +350,357 @@
   </main>
 
   <footer>
-    Pagina estatica para GitHub Pages. Visual inspirado em plataformas de musica, sem bibliotecas externas.
+    Para funcionar no GitHub Pages, deixe este arquivo index.html e o dataset.csv na mesma pasta.
   </footer>
+
+  <script>
+    const CSV_FILE = "dataset.csv";
+
+    function parseCSV(text) {
+      const rows = [];
+      let row = [];
+      let value = "";
+      let inQuotes = false;
+
+      for (let i = 0; i < text.length; i++) {
+        const char = text[i];
+        const next = text[i + 1];
+
+        if (char === '"' && inQuotes && next === '"') {
+          value += '"';
+          i++;
+        } else if (char === '"') {
+          inQuotes = !inQuotes;
+        } else if (char === "," && !inQuotes) {
+          row.push(value);
+          value = "";
+        } else if ((char === "\n" || char === "\r") && !inQuotes) {
+          if (char === "\r" && next === "\n") i++;
+          row.push(value);
+          if (row.length > 1 || row[0] !== "") rows.push(row);
+          row = [];
+          value = "";
+        } else {
+          value += char;
+        }
+      }
+
+      if (value || row.length) {
+        row.push(value);
+        rows.push(row);
+      }
+
+      const headers = rows.shift().map((h) => h.trim());
+      return rows.map((items) => {
+        const obj = {};
+        headers.forEach((header, index) => {
+          obj[header || "index"] = items[index];
+        });
+        return obj;
+      });
+    }
+
+    function number(value) {
+      const n = Number(value);
+      return Number.isFinite(n) ? n : 0;
+    }
+
+    function average(rows, column) {
+      if (!rows.length) return 0;
+      return rows.reduce((sum, row) => sum + number(row[column]), 0) / rows.length;
+    }
+
+    function groupBy(rows, column) {
+      const groups = new Map();
+      rows.forEach((row) => {
+        const key = row[column] || "Nao informado";
+        if (!groups.has(key)) groups.set(key, []);
+        groups.get(key).push(row);
+      });
+      return groups;
+    }
+
+    function format(value, digits = 2) {
+      return Number(value).toLocaleString("pt-BR", {
+        minimumFractionDigits: digits,
+        maximumFractionDigits: digits
+      });
+    }
+
+    function formatInt(value) {
+      return Number(value).toLocaleString("pt-BR");
+    }
+
+    function renderBars(elementId, rows, options = {}) {
+      const max = Math.max(...rows.map((row) => row.value), 1);
+      const html = rows.map((row) => {
+        const width = Math.max((row.value / max) * 100, 2);
+        const shown = options.integer ? formatInt(row.value) : format(row.value, options.digits ?? 2);
+        return `
+          <div class="bar-row" title="${row.label}: ${shown}">
+            <span>${row.label}</span>
+            <div class="bar-track"><div class="bar" style="width:${width}%"></div></div>
+            <strong>${shown}</strong>
+          </div>
+        `;
+      }).join("");
+      document.getElementById(elementId).innerHTML = html;
+    }
+
+    function lineSvg(rows, options = {}) {
+      const width = 520;
+      const height = 280;
+      const left = 54;
+      const right = 492;
+      const top = 30;
+      const bottom = 220;
+      const values = rows.map((row) => row.value);
+      const min = options.min ?? Math.min(...values);
+      const max = options.max ?? Math.max(...values);
+      const step = rows.length > 1 ? (right - left) / (rows.length - 1) : 0;
+
+      const points = rows.map((row, index) => {
+        const x = left + index * step;
+        const y = bottom - ((row.value - min) / (max - min || 1)) * (bottom - top);
+        return { ...row, x, y };
+      });
+
+      const polyline = points.map((point) => `${point.x},${point.y}`).join(" ");
+      const labels = points.map((point) =>
+        `<text class="tick" x="${point.x - 20}" y="248">${point.short || point.label}</text>`
+      ).join("");
+      const circles = points.map((point) =>
+        `<circle class="point" cx="${point.x}" cy="${point.y}" r="6"><title>${point.label}: ${format(point.value, options.digits ?? 2)}</title></circle>`
+      ).join("");
+
+      return `
+        <svg viewBox="0 0 ${width} ${height}">
+          <line class="grid-line" x1="${left}" y1="60" x2="${right}" y2="60"/>
+          <line class="grid-line" x1="${left}" y1="126" x2="${right}" y2="126"/>
+          <line class="grid-line" x1="${left}" y1="192" x2="${right}" y2="192"/>
+          <line class="axis" x1="${left}" y1="${top}" x2="${left}" y2="${bottom}"/>
+          <line class="axis" x1="${left}" y1="${bottom}" x2="${right}" y2="${bottom}"/>
+          <polyline class="line" points="${polyline}"/>
+          ${circles}
+          ${labels}
+        </svg>
+      `;
+    }
+
+    function scatterSvg(rows) {
+      const width = 900;
+      const height = 360;
+      const left = 70;
+      const right = 850;
+      const top = 30;
+      const bottom = 300;
+      const xMin = -20;
+      const xMax = 2;
+      const yMin = 0;
+      const yMax = 1;
+
+      const circles = rows.map((row) => {
+        const xValue = number(row.loudness);
+        const yValue = number(row.energy);
+        if (xValue < xMin || xValue > xMax) return "";
+        const x = left + ((xValue - xMin) / (xMax - xMin)) * (right - left);
+        const y = bottom - ((yValue - yMin) / (yMax - yMin)) * (bottom - top);
+        return `<circle class="point" cx="${x}" cy="${y}" r="4"><title>Loudness ${format(xValue, 2)} | Energy ${format(yValue, 3)}</title></circle>`;
+      }).join("");
+
+      return `
+        <svg viewBox="0 0 ${width} ${height}">
+          <line class="grid-line" x1="${left}" y1="55" x2="${right}" y2="55"/>
+          <line class="grid-line" x1="${left}" y1="145" x2="${right}" y2="145"/>
+          <line class="grid-line" x1="${left}" y1="235" x2="${right}" y2="235"/>
+          <line class="axis" x1="${left}" y1="${top}" x2="${left}" y2="${bottom}"/>
+          <line class="axis" x1="${left}" y1="${bottom}" x2="${right}" y2="${bottom}"/>
+          <text class="tick" x="22" y="60">1,00</text>
+          <text class="tick" x="22" y="150">0,50</text>
+          <text class="tick" x="22" y="240">0,25</text>
+          <text class="tick" x="70" y="326">-20</text>
+          <text class="tick" x="270" y="326">-15</text>
+          <text class="tick" x="470" y="326">-10</text>
+          <text class="tick" x="670" y="326">-5</text>
+          <text class="tick" x="840" y="326">0</text>
+          ${circles}
+        </svg>
+      `;
+    }
+
+    function quantile(values, q) {
+      const sorted = values.slice().sort((a, b) => a - b);
+      const pos = (sorted.length - 1) * q;
+      const base = Math.floor(pos);
+      const rest = pos - base;
+      if (sorted[base + 1] !== undefined) {
+        return sorted[base] + rest * (sorted[base + 1] - sorted[base]);
+      }
+      return sorted[base] || 0;
+    }
+
+    function boxSvg(groups) {
+      const width = 520;
+      const height = 280;
+      const bottom = 224;
+      const scaleY = (value) => bottom - value * 190;
+      const items = groups.map((group, index) => {
+        const values = group.values;
+        const min = Math.min(...values);
+        const q1 = quantile(values, 0.25);
+        const median = quantile(values, 0.5);
+        const q3 = quantile(values, 0.75);
+        const max = Math.max(...values);
+        const cx = index === 0 ? 180 : 340;
+        const color = index === 0 ? "#1db954" : "#1ed760";
+        return `
+          <line x1="${cx}" y1="${scaleY(max)}" x2="${cx}" y2="${scaleY(min)}" stroke="${color}" stroke-width="2"/>
+          <rect x="${cx - 45}" y="${scaleY(q3)}" width="90" height="${scaleY(q1) - scaleY(q3)}" fill="rgba(29,185,84,0.22)" stroke="${color}" stroke-width="2">
+            <title>${group.label} | mediana ${format(median, 3)}</title>
+          </rect>
+          <line x1="${cx - 45}" y1="${scaleY(median)}" x2="${cx + 45}" y2="${scaleY(median)}" stroke="#f4fff7" stroke-width="3"/>
+          <line x1="${cx - 30}" y1="${scaleY(min)}" x2="${cx + 30}" y2="${scaleY(min)}" stroke="${color}" stroke-width="2"/>
+          <line x1="${cx - 30}" y1="${scaleY(max)}" x2="${cx + 30}" y2="${scaleY(max)}" stroke="${color}" stroke-width="2"/>
+          <text class="tick" x="${cx - 40}" y="254">${group.label}</text>
+        `;
+      }).join("");
+
+      return `
+        <svg viewBox="0 0 ${width} ${height}">
+          <line class="grid-line" x1="62" y1="40" x2="492" y2="40"/>
+          <line class="grid-line" x1="62" y1="100" x2="492" y2="100"/>
+          <line class="grid-line" x1="62" y1="160" x2="492" y2="160"/>
+          <line class="axis" x1="62" y1="28" x2="62" y2="224"/>
+          <line class="axis" x1="62" y1="224" x2="492" y2="224"/>
+          <text class="tick" x="22" y="44">1,00</text>
+          <text class="tick" x="22" y="104">0,75</text>
+          <text class="tick" x="22" y="164">0,50</text>
+          ${items}
+        </svg>
+      `;
+    }
+
+    function rowsByRange(rows, column, ranges) {
+      return ranges.map((range) => {
+        const filtered = rows.filter((row) => {
+          const value = number(row[column]);
+          return value >= range.min && value < range.max;
+        });
+        return {
+          label: range.label,
+          short: range.short,
+          rows: filtered
+        };
+      });
+    }
+
+    function buildDashboard(rows) {
+      const genres = groupBy(rows, "track_genre");
+      const topGenres = Array.from(genres.entries()).map(([label, items]) => ({
+        label,
+        value: average(items, "popularity")
+      })).sort((a, b) => b.value - a.value).slice(0, 10);
+
+      const tempoRanges = [
+        { label: "0-60", min: 0, max: 60 },
+        { label: "60-80", min: 60, max: 80 },
+        { label: "80-100", min: 80, max: 100 },
+        { label: "100-120", min: 100, max: 120 },
+        { label: "120-140", min: 120, max: 140 },
+        { label: "140-160", min: 140, max: 160 },
+        { label: "160-180", min: 160, max: 180 },
+        { label: "180+", min: 180, max: 999 }
+      ];
+
+      const fiveRanges = [
+        { label: "Muito baixo", short: "Muito baixo", min: 0, max: 0.2 },
+        { label: "Baixo", short: "Baixo", min: 0.2, max: 0.4 },
+        { label: "Medio", short: "Medio", min: 0.4, max: 0.6 },
+        { label: "Alto", short: "Alto", min: 0.6, max: 0.8 },
+        { label: "Muito alto", short: "Muito alto", min: 0.8, max: 1.01 }
+      ];
+
+      const durationRanges = [
+        { label: "Ate 2 min", short: "Ate 2", min: 0, max: 2 },
+        { label: "2 a 3 min", short: "2-3", min: 2, max: 3 },
+        { label: "3 a 4 min", short: "3-4", min: 3, max: 4 },
+        { label: "4 a 5 min", short: "4-5", min: 4, max: 5 },
+        { label: "Mais de 5 min", short: "5+", min: 5, max: 999 }
+      ];
+
+      const tempoData = rowsByRange(rows, "tempo", tempoRanges).map((item) => ({
+        label: item.label,
+        value: item.rows.length
+      }));
+
+      const livenessData = rowsByRange(rows, "liveness", fiveRanges).map((item) => ({
+        label: item.label,
+        short: item.short,
+        value: average(item.rows, "popularity")
+      }));
+
+      const energyData = rowsByRange(rows, "energy", fiveRanges).map((item) => ({
+        label: item.label,
+        value: average(item.rows, "popularity")
+      }));
+
+      const durationRows = rows.map((row) => ({
+        ...row,
+        duration_min: number(row.duration_ms) / 60000
+      }));
+
+      const durationData = durationRanges.map((range) => {
+        const filtered = durationRows.filter((row) => row.duration_min >= range.min && row.duration_min < range.max);
+        return {
+          label: range.label,
+          short: range.short,
+          value: average(filtered, "popularity")
+        };
+      });
+
+      const acousticData = rowsByRange(rows, "acousticness", fiveRanges).map((item) => ({
+        label: item.label,
+        short: item.short,
+        value: average(item.rows, "energy")
+      }));
+
+      const explicitFalse = rows.filter((row) => String(row.explicit).toLowerCase() === "false").map((row) => number(row.danceability));
+      const explicitTrue = rows.filter((row) => String(row.explicit).toLowerCase() === "true").map((row) => number(row.danceability));
+
+      document.getElementById("totalTracks").textContent = formatInt(rows.length);
+      document.getElementById("totalGenres").textContent = formatInt(genres.size);
+
+      renderBars("chartGenres", topGenres, { digits: 2 });
+      renderBars("chartTempo", tempoData, { integer: true });
+      document.getElementById("chartLiveness").innerHTML = lineSvg(livenessData, { min: 25, max: 45, digits: 2 });
+      document.getElementById("chartScatter").innerHTML = scatterSvg(rows.filter((_, index) => index % 500 === 0));
+      document.getElementById("chartDance").innerHTML = boxSvg([
+        { label: "Nao explicita", values: explicitFalse },
+        { label: "Explicita", values: explicitTrue }
+      ]);
+      renderBars("chartEnergy", energyData, { digits: 2 });
+      document.getElementById("chartDuration").innerHTML = lineSvg(durationData, { min: 20, max: 45, digits: 2 });
+      document.getElementById("chartAcoustic").innerHTML = lineSvg(acousticData, { min: 0, max: 1, digits: 3 });
+
+      document.getElementById("status").textContent = "Dataset carregado com sucesso.";
+    }
+
+    fetch(CSV_FILE)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Nao foi possivel carregar dataset.csv");
+        }
+        return response.text();
+      })
+      .then((text) => {
+        const rows = parseCSV(text);
+        buildDashboard(rows);
+      })
+      .catch((error) => {
+        document.getElementById("status").textContent =
+          "Erro ao carregar dataset.csv. Confira se o arquivo esta na mesma pasta do index.html no GitHub.";
+        console.error(error);
+      });
+  </script>
 </body>
 </html>
